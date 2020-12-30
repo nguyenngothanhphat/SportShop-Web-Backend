@@ -4,6 +4,8 @@ require("dotenv").config();
 /* Import Packages */
 const express = require('express');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 /* App config */
 const app = express();
