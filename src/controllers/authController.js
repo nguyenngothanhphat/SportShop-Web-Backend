@@ -89,17 +89,20 @@ const requireLogin = expressJwt({
 });
 
 const isAuth = (req, res, next) => {
-  console.log("req: ", req);
   let user = req.profile && req.auth && req.profile._id == req.auth._id;
   if (!user) {
-    return res. status(403).json({message: "Access denied"});
+    return res.status(403).json({
+      message: 'Access denied'
+    });
   }
   next();
 }
 
 const isAdmin = (req, res, next) => {
   if (req.profile.role === 0) {
-    return res.status(403).json({message: "Admin resource! Access denied"})
+    return res.status(403).json({
+      message: 'Admin resourse! Access denied'
+    });
   }
   next();
 }

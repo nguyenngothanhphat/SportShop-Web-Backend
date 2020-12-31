@@ -30,7 +30,6 @@ mongoose.connection.on("error", (err) => {
 
 /* Middlewares */
 app.use(morgan("dev"));
-app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
