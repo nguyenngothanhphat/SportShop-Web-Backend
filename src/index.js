@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
 const authRoute = require("./routes/authRoute");
+const userRoute = require("./routes/userRoute");
 
 /* App config */
 const app = express();
@@ -29,7 +30,7 @@ mongoose.connection.on("error", (err) => {
 
 /* Middlewares */
 app.use(morgan("dev"));
-// app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -38,6 +39,7 @@ app.get("/", (req, res) => {
   res.send("SportShop-Web-BE");
 });
 app.use("/auth", authRoute);
+app.use("/profile", userRoute);
 
 /* App.listen */
 app.listen(port, () =>
