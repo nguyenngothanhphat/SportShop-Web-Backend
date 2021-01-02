@@ -10,6 +10,9 @@ const cookieParser = require("cookie-parser");
 
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
+const categoryRoute = require("./routes/categoryRoute");
+const brandRoute = require("./routes/brandRoute");
+const productRoute = require("./routes/productRoute");
 
 /* App config */
 const app = express();
@@ -39,6 +42,9 @@ app.get("/", (req, res) => {
 });
 app.use("/auth", authRoute);
 app.use("/profile", userRoute);
+app.use("/admin", categoryRoute);
+app.use("/admin", brandRoute);
+app.use("/admin", productRoute);
 
 /* App.listen */
 app.listen(port, () =>

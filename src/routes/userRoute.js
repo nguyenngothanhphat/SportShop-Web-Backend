@@ -7,7 +7,7 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 const {requireLogin, isAuth, isAdmin} = require("../controllers/authController");
 
-router.get("/user/:userId", requireLogin, isAuth, isAdmin, (req, res) => {
+router.get("/user/:userId", requireLogin, isAdmin, (req, res) => {
     res.json({
         user: req.profile
     })

@@ -60,52 +60,55 @@ const login = (req, res, next) => {
   }
   User.findOne({ email }, (err, user) => {
     if (err || !user) {
-      return res
-        .status(400)
-        .json({
-          message: "User with that email does not exist. Please sign up",
-        });
+      return res.status(400).json({
+        message: "User with that email does not exist. Please sign up",
+      });
     }
 
     if (!user.authenticate(password)) {
-      return res.status(401).json({ message: "Email or password don't match!" })
+      return res
+        .status(401)
+        .json({ message: "Email or password don't match!" });
     }
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET)
-    res.cookie('t', token, { expire: new Date() + 9999 });
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+    res.cookie("t", token, { expire: new Date() + 9999 });
 
     const { _id, firstName, lastName, email, role } = user;
-    return res.status(200).json({ token: token, user: { _id, firstName, lastName, email, role } });
+    return res
+      .status(200)
+      .json({ token: token, user: { _id, firstName, lastName, email, role } });
   });
 };
 
 const logout = (req, res, next) => {
-  res.clearCookie('t');
+  res.clearCookie("t");
   res.status(200).json({ message: "Logout success" });
-}
+};
 
 const requireLogin = expressJwt({
   secret: process.env.JWT_SECRET,
-  userProperty: "auth"
+  userProperty: "auth",
 });
 
 const isAuth = (req, res, next) => {
   let user = req.profile && req.auth && req.profile._id == req.auth._id;
   if (!user) {
     return res.status(403).json({
-      message: 'Access denied'
+      message: "Access denied",
     });
   }
   next();
-}
+};
 
 const isAdmin = (req, res, next) => {
   if (req.profile.role === 0) {
     return res.status(403).json({
-      message: 'Admin resourse! Access denied'
+      message: "Admin resourse! Access denied",
     });
-  }
+  } 
   next();
-}
+
+};
 
 module.exports = {
   signUp,
