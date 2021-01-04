@@ -36,6 +36,10 @@ const productSchema = new mongoose.Schema(
     quantity: {
       type: Number,
     },
+    sold: {
+      type: Number,
+      default: 0
+    },
     productImage: {
       data: Buffer,
       contentType: String,
