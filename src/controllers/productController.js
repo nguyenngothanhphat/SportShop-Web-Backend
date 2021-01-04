@@ -24,6 +24,24 @@ const readProduct = (req, res, next) => {
   return res.status(200).json(req.product);
 };
 
+const listProduct = (req, res, next) => {
+  let order = req.query.order ? req.query.order : 'asc';
+  let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
+  let limit = req.query.limit ? req.query.limit : 6;
+
+  Product.find()
+    .select("-productImage")
+    .populate("category")
+    .sort([[sortBy, order]])
+    .limit(limit)
+    .exec((err, products) => {
+      if (err || !products) {
+        return res.status(400).json({ message: errorHelper.errorHandler(err) });
+      }
+      res.status(200).json({ products })
+    })
+}
+
 const createProduct = (req, res, next) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
@@ -176,6 +194,7 @@ const deleteProduct = (req, res, next) => {
 module.exports = {
   getProductById,
   readProduct,
+  listProduct,
   createProduct,
   updateProduct,
   deleteProduct,
