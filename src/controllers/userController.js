@@ -13,6 +13,17 @@ const getUserById = (req, res, next, id) => {
     })
 }
 
+const read = (req, res, next) => {
+    req.profile.hash_password = undefined;
+    req.profile.salt = undefined;
+    return res.json(req.profile);
+}
+
+// const update = (req, res) => {
+
+// }
+
 module.exports = {
     getUserById,
+    read
 }
