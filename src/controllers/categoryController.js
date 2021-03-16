@@ -1,69 +1,60 @@
 const Category = require("../models/category");
-const errorHelper = require("../helpers/errorHelper");
+const Product = require("../models/product");
+const SubCategory = require("../models/subCategory");
+const slugify = require("slugify");
 
-const getAllCategories = (req, res, next) => {
-  Category.find().exec((err, data) => {
-    if (err || !data) {
-      return res.status(400).json({message: errorHelper.errorHandler(err)});
-    }
-    res.status(200).json({data});
-  })
-}
+exports.create = async (req, res) => {
+  try {
+    const { name } = req.body;
+    // const category = await new Category({ name, slug: slugify(name) }).save();
+    // res.json(category);
+    res.json(await new Category({ name, slug: slugify(name) }).save());
+  } catch (err) {
+    // console.log(err);
+    res.status(400).send("Create category failed");
+  }
+};
 
-const getCategoryById = (req, res, next, id) => {
-  Category.findById(id).exec((err, category) => {
-    if (err || !category) {
-      return res.status(400).json({ message: "Category not found" });
-    }
-    req.category = category;
-    next();
-  })
-}
+exports.list = async (req, res) =>
+  res.json(await Category.find({}).sort({ createdAt: -1 }).exec());
 
-const read = (req, res, next) => {
-  return res.status(200).json(req.category);
-}
+exports.read = async (req, res) => {
+  let category = await Category.findOne({ slug: req.params.slug }).exec();
+  // res.json(category);
+  const products = await Product.find({ category }).populate("category").exec();
 
-const createCategory = (req, res, next) => {
-  const category = new Category(req.body);
-  category.save((err, result) => {
-    if (err) {
-      return res.status(400).json({ message: errorHelper.errorHandler(err) });
-    }
-    res.status(200).json({ result });
+  res.json({
+    category,
+    products,
   });
 };
 
-const updateCategory = (req, res, next) => {
-  const category = req.category;
-  category.categoryName = req.body.categoryName;
-  category.description = req.body.description;
-  category.save((err, data) => {
-    if (err || !data) {
-      {
-        return res.status(400).json({ message: errorHelper.errorHandler(err) })
-      }
-    }
-
-    res.status(200).json({ data });
-  })
-}
-
-const deleteCategory = (req, res, next) => {
+exports.update = async (req, res) => {
+  const { name } = req.body;
   try {
-    let category = req.category;
-    category.remove();
-    return res.status(200).json({ message: "Category deleted successfully" });
-  } catch {
-    return res.status(400).json({ message: "Cannot remove category" });
+    const updated = await Category.findOneAndUpdate(
+      { slug: req.params.slug },
+      { name, slug: slugify(name) },
+      { new: true }
+    );
+    res.json(updated);
+  } catch (err) {
+    res.status(400).send("Category update failed");
   }
-}
+};
 
-module.exports = {
-  getAllCategories,
-  getCategoryById,
-  read,
-  createCategory,
-  updateCategory,
-  deleteCategory,
+exports.remove = async (req, res) => {
+  try {
+    const deleted = await Category.findOneAndDelete({ slug: req.params.slug });
+    res.json(deleted);
+  } catch (err) {
+    res.status(400).send("Category delete failed");
+  }
+};
+
+exports.getSubs = (req, res) => {
+  SubCategory.find({ parent: req.params._id }).exec((err, subs) => {
+    if (err) console.log(err);
+    res.json(subs);
+  });
 };

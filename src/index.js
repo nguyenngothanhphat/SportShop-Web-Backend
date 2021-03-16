@@ -8,12 +8,14 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require('cors');
+const {readdirSync} = require("fs");
 
-const authRoute = require("./routes/authRoute");
-const userRoute = require("./routes/userRoute");
-const categoryRoute = require("./routes/categoryRoute");
-const brandRoute = require("./routes/brandRoute");
-const productRoute = require("./routes/productRoute");
+// const authRoute = require("./routes/authRoute");
+// const userRoute = require("./routes/userRoute");
+// const categoryRoute = require("./routes/categoryRoute");
+// const brandRoute = require("./routes/brandRoute");
+// const productRoute = require("./routes/productRoute");
+// const subCategoryRoute = require("./routes/subCategoryRoute");
 
 /* App config */
 const app = express();
@@ -34,7 +36,7 @@ mongoose.connection.on("error", (err) => {
 
 /* Middlewares */
 app.use(morgan("dev"));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "2mb" }));
 app.use(cookieParser());
 app.use(cors());
 
@@ -42,11 +44,15 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.send("SportShop-Web-BE");
 });
-app.use("/auth", authRoute);
-app.use("/profile", userRoute);
-app.use("/admin", categoryRoute);
-app.use("/admin", brandRoute);
-app.use("/admin", productRoute);
+
+readdirSync("./routes").map((r) => app.use("/api", require("./routes/" + r)));
+
+// app.use("/auth", authRoute);
+// app.use("/profile", userRoute);
+// app.use("/admin", categoryRoute);
+// app.use("/admin", brandRoute);
+// app.use("/admin", productRoute);
+// app.use("/admin", subCategoryRoute);
 
 /* App.listen */
 app.listen(port, () =>

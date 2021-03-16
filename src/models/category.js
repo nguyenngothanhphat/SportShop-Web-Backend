@@ -13,6 +13,12 @@ const categorySchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    slug: {
+      type: String,
+      unique: true,
+      lowercase: true,
+      index: true,
+    },
   },
   {
     timestamps: true,

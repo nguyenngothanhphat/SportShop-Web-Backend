@@ -8,6 +8,12 @@ const productSchema = new mongoose.Schema(
       ref: "Category",
       required: true,
     },
+    subs: [
+      {
+        type: ObjectId,
+        ref: "Sub",
+      },
+    ],
     brand: {
       type: ObjectId,
       ref: "Brand",
@@ -18,20 +24,31 @@ const productSchema = new mongoose.Schema(
       trim: true,
       required: true,
       maxLength: 100,
+      text: true,
     },
-    productRate: {
-      type: Number,
-      maxlength: 1,
+    slug: {
+      type: String,
+      unique: true,
+      lowercase: true,
+      index: true,
     },
+    productRate: [
+      {
+        star: Number,
+        postedBy: { type: ObjectId, ref: "User" },
+      },
+    ],
     price: {
-      type: Number,
-      trim: true,
+      ype: String,
       required: true,
-      maxLength: 35,
+      maxlength: 2000,
+      text: true,
     },
     description: {
       type: String,
-      trim: true,
+      required: true,
+      maxlength: 2000,
+      text: true,
     },
     quantity: {
       type: Number,
@@ -41,8 +58,7 @@ const productSchema = new mongoose.Schema(
       default: 0
     },
     productImage: {
-      data: Buffer,
-      contentType: String,
+      type: Array,
     },
     productStatus: {
       type: String,
@@ -50,8 +66,8 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     shipping: {
-      required: false,
-      type: Boolean,
+      type: String,
+      enum: ["Yes", "No"],
     },
   },
   {
