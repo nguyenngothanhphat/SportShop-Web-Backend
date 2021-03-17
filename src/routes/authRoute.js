@@ -1,13 +1,15 @@
-/* Import packages */
 const express = require("express");
 
-/* Init router */
 const router = express.Router();
 
-const authController = require("../controllers/authController");
+// middlewares
+const { authCheck, adminCheck } = require("../middlewares/auth");
 
-router.post("/signup", authController.signUp);
-router.post("/login", authController.login);
-router.get("/logout", authController.logout);
+// controller
+const { createOrUpdateUser, currentUser } = require("../controllers/auth");
+
+router.post("/create-or-update-user", authCheck, createOrUpdateUser);
+router.post("/current-user", authCheck, currentUser);
+router.post("/current-admin", authCheck, adminCheck, currentUser);
 
 module.exports = router;

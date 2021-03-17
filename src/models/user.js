@@ -3,46 +3,24 @@ const { ObjectId } = mongoose.Schema;
 
 const userSchema = new mongoose.Schema(
   {
+    name: String,
     email: {
       type: String,
-      trim: true,
       required: true,
-      unique: true,
-    },
-    firstName: {
-      type: String,
-      trim: true,
-      required: true,
-      maxlength: 30,
-    },
-    lastName: {
-      type: String,
-      trim: true,
-      required: true,
-      maxlength: 30,
-    },
-    address: {
-      type: String,
-      trim: true,
-      maxlength: 60,
-    },
-    phoneNumber: {
-      type: Number,
-      maxlength: 10,
+      index: true,
     },
     role: {
-      type: Number,
-      default: "Subcriber",
+      type: String,
+      default: "subscriber",
     },
     cart: {
       type: Array,
       default: [],
     },
+    address: String,
     wishlist: [{ type: ObjectId, ref: "Product" }],
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("User", userSchema);

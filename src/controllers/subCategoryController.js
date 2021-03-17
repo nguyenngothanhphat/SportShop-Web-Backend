@@ -1,33 +1,38 @@
-const SubCategory = require("../models/subCategory");
+const subCategory = require("../models/subCategory");
+const Product = require("../models/product");
 const slugify = require("slugify");
 
-exports.create = (req, res, next) => {
-  const { subCategoryName, parent } = req.body;
-  const subCate = new SubCategory({ subCategoryName, parent, slug: slugify(req.body.subCategoryName) });
-  subCate.save((err, result) => {
-    if (err) {
-      return res.status(400).json({ message: "Err" })
-    }
-    res.status(200).json({ result })
-  })
-}
-
-
+exports.create = async (req, res) => {
+  try {
+    const { name, parent } = req.body;
+    res.json(await new subCategory({ name, parent, slug: slugify(name) }).save());
+  } catch (err) {
+    console.log("SUB CREATE ERR ----->", err);
+    res.status(400).send("Create sub failed");
+  }
+};
 
 exports.list = async (req, res) =>
-  res.json(await SubCategory.find({}).sort({ createdAt: -1 }).exec());
+  res.json(await subCategory.find({}).sort({ createdAt: -1 }).exec());
 
 exports.read = async (req, res) => {
-  let sub = await SubCategory.findOne({ slug: req.params.slug }).exec();
-  res.json(sub);
+  let sub = await subCategory.findOne({ slug: req.params.slug }).exec();
+  const products = await Product.find({ subs: sub })
+    .populate("category")
+    .exec();
+
+  res.json({
+    sub,
+    products,
+  });
 };
 
 exports.update = async (req, res) => {
-  const { subCategoryName } = req.body;
+  const { name, parent } = req.body;
   try {
-    const updated = await SubCategory.findOneAndUpdate(
+    const updated = await subCategory.findOneAndUpdate(
       { slug: req.params.slug },
-      { subCategoryName, slug: slugify(subCategoryName) },
+      { name, parent, slug: slugify(name) },
       { new: true }
     );
     res.json(updated);
@@ -38,7 +43,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
   try {
-    const deleted = await SubCategory.findOneAndDelete({ slug: req.params.slug });
+    const deleted = await subCategory.findOneAndDelete({ slug: req.params.slug });
     res.json(deleted);
   } catch (err) {
     res.status(400).send("Sub delete failed");

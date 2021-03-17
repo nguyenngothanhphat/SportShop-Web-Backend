@@ -1,22 +1,38 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const userController = require("../controllers/userController");
-const authController = require("../controllers/authController");
-const productController = require("../controllers/productController");
+// middlewares
+const { authCheck, adminCheck } = require("../middlewares/auth");
 
-router.get("/products", productController.listProduct);
-router.get("/products/search", productController.listSearch);
-router.get("/products/related/:productId", productController.listRelated);
-router.get("/products/categories", productController.listCategories);
-router.post("/products/by/search", productController.listBySearch);
-router.get("/product/image/:productId", productController.image);
-router.get("/product/:productId", productController.readProduct);
-router.post("/product/create/:userId", authController.requireLogin, authController.isAuth, authController.isAdmin, productController.createProduct);
-router.put("/product/update/:productId/:userId", authController.requireLogin, authController.isAuth, authController.isAdmin, productController.updateProduct);
-router.delete("/delete/product/:productId/:userId", authController.requireLogin, authController.isAuth, authController.isAdmin, productController.deleteProduct);
+// controller
+const {
+    create,
+    listAll,
+    remove,
+    read,
+    update,
+    list,
+    productsCount,
+    productStar,
+    listRelated,
+    searchFilters,
+} = require("../controllers/product");
 
-router.param("productId", productController.getProductById);
-router.param("userId", userController.getUserById);
+// routes
+router.post("/product", authCheck, adminCheck, create);
+router.get("/products/total", productsCount);
+
+router.get("/products/:count", listAll); // products/100
+router.delete("/product/:slug", authCheck, adminCheck, remove);
+router.get("/product/:slug", read);
+router.put("/product/:slug", authCheck, adminCheck, update);
+
+router.post("/products", list);
+// rating
+router.put("/product/star/:productId", authCheck, productStar);
+// related
+router.get("/product/related/:productId", listRelated);
+// search
+router.post("/search/filters", searchFilters);
 
 module.exports = router;

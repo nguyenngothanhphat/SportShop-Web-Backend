@@ -3,27 +3,11 @@ const { ObjectId } = mongoose.Schema;
 
 const productSchema = new mongoose.Schema(
   {
-    category: {
-      type: ObjectId,
-      ref: "Category",
-      required: true,
-    },
-    subs: [
-      {
-        type: ObjectId,
-        ref: "Sub",
-      },
-    ],
-    brand: {
-      type: ObjectId,
-      ref: "Brand",
-      required: true,
-    },
-    productName: {
+    title: {
       type: String,
       trim: true,
       required: true,
-      maxLength: 100,
+      maxlength: 32,
       text: true,
     },
     slug: {
@@ -32,47 +16,56 @@ const productSchema = new mongoose.Schema(
       lowercase: true,
       index: true,
     },
-    productRate: [
-      {
-        star: Number,
-        postedBy: { type: ObjectId, ref: "User" },
-      },
-    ],
-    price: {
-      ype: String,
-      required: true,
-      maxlength: 2000,
-      text: true,
-    },
     description: {
       type: String,
       required: true,
       maxlength: 2000,
       text: true,
     },
-    quantity: {
+    price: {
       type: Number,
+      required: true,
+      trim: true,
+      maxlength: 32,
     },
+    category: {
+      type: ObjectId,
+      ref: "Category",
+    },
+    subs: [
+      {
+        type: ObjectId,
+        ref: "Sub",
+      },
+    ],
+    quantity: Number,
     sold: {
       type: Number,
-      default: 0
+      default: 0,
     },
-    productImage: {
+    images: {
       type: Array,
-    },
-    productStatus: {
-      type: String,
-      trim: true,
-      required: true,
     },
     shipping: {
       type: String,
       enum: ["Yes", "No"],
     },
+    color: {
+      type: String,
+      enum: ["Black", "Brown", "Silver", "White", "Blue"],
+    },
+    brand: {
+      type: ObjectId,
+      ref: "Brand",
+    },
+    ratings: [
+      {
+        star: Number,
+        postedBy: { type: ObjectId, ref: "User" },
+      },
+    ],
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Product", productSchema);

@@ -1,13 +1,17 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const subCategoryController = require("../controllers/subCategoryController");
-const {requireLogin, isAdmin, isAuth} = require('../controllers/authController');
+// middlewares
+const { authCheck, adminCheck } = require("../middlewares/auth");
 
-router.post("/sub", requireLogin, isAuth, isAdmin, subCategoryController.create);
-router.get("/subs", subCategoryController.list);
-router.get("/sub/:slug", subCategoryController.read);
-router.put("/sub/:slug", requireLogin, isAuth, isAdmin, subCategoryController.update);
-router.delete("/sub/:slug", requireLogin, isAuth, isAdmin, subCategoryController.delete);
+// controller
+const { create, read, update, remove, list } = require("../controllers/sub");
+
+// routes
+router.post("/sub", authCheck, adminCheck, create);
+router.get("/subs", list);
+router.get("/sub/:slug", read);
+router.put("/sub/:slug", authCheck, adminCheck, update);
+router.delete("/sub/:slug", authCheck, adminCheck, remove);
 
 module.exports = router;

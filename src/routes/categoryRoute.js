@@ -1,17 +1,25 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const userController = require("../controllers/userController");
-const categoryController = require("../controllers/categoryController");
-const {requireLogin, isAdmin, isAuth} = require('../controllers/authController');
+// middlewares
+const { authCheck, adminCheck } = require("../middlewares/auth");
 
-router.get("/category", categoryController.getAllCategories);
-router.get("/category/:categoryId", categoryController.read);
-router.post("/category/create/:userId", requireLogin, isAuth, isAdmin, categoryController.createCategory);
-router.put("/category/update/:categoryId/:userId", requireLogin, isAuth, isAdmin, categoryController.updateCategory);
-router.delete("/category/delete/:categoryId/:userId", requireLogin, isAuth, isAdmin, categoryController.deleteCategory);
+// controller
+const {
+    create,
+    read,
+    update,
+    remove,
+    list,
+    getSubs,
+} = require("../controllers/category");
 
-router.param("categoryId", categoryController.getCategoryById);
-router.param("userId", userController.getUserById);
+// routes
+router.post("/category", authCheck, adminCheck, create);
+router.get("/categories", list);
+router.get("/category/:slug", read);
+router.put("/category/:slug", authCheck, adminCheck, update);
+router.delete("/category/:slug", authCheck, adminCheck, remove);
+router.get("/category/subs/:_id", getSubs);
 
 module.exports = router;
