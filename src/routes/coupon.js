@@ -5,7 +5,7 @@ const router = express.Router();
 const { authCheck, adminCheck } = require("../middlewares/auth");
 
 // controller
-const { create, remove, list } = require("../controllers/coupon");
+const { create, remove, list } = require("../controllers/couponController");
 
 // routes
 router.post("/coupon", authCheck, adminCheck, create);

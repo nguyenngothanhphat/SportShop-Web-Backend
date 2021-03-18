@@ -12,7 +12,7 @@ const {
     remove,
     list,
     getSubs,
-} = require("../controllers/category");
+} = require("../controllers/categoryController");
 
 // routes
 router.post("/category", authCheck, adminCheck, create);

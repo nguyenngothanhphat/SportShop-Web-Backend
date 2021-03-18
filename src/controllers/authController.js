@@ -2,6 +2,7 @@ const User = require("../models/user");
 
 exports.createOrUpdateUser = async (req, res) => {
   const { name, picture, email } = req.user;
+  console.log("🚀 ~ file: authController.js ~ line 5 ~ exports.createOrUpdateUser= ~ email", email)
 
   const user = await User.findOneAndUpdate(
     { email },

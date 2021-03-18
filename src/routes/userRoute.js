@@ -17,7 +17,7 @@ const {
     wishlist,
     removeFromWishlist,
     createCashOrder,
-} = require("../controllers/user");
+} = require("../controllers/userController");
 
 router.post("/user/cart", authCheck, userCart); // save cart
 router.get("/user/cart", authCheck, getUserCart); // get cart

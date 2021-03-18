@@ -11,7 +11,6 @@ const cors = require('cors');
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const categoryRoute = require("./routes/categoryRoute");
-const brandRoute = require("./routes/brandRoute");
 const productRoute = require("./routes/productRoute");
 const subCategoryRoute = require("./routes/subCategoryRoute");
 
@@ -36,7 +35,6 @@ mongoose.connection.on("error", (err) => {
 /* Middlewares */
 app.use(morgan("dev"));
 app.use(bodyParser.json({ limit: "2mb" }));
-app.use(cookieParser());
 app.use(cors());
 
 /* Routes */
@@ -47,7 +45,6 @@ app.get("/", (req, res) => {
 app.use("/api", authRoute);
 app.use("/api", userRoute);
 app.use("/api", categoryRoute);
-app.use("/api", brandRoute);
 app.use("/api", productRoute);
 app.use("/api", subCategoryRoute);
 

@@ -16,7 +16,7 @@ const {
     productStar,
     listRelated,
     searchFilters,
-} = require("../controllers/product");
+} = require("../controllers/productController");
 
 // routes
 router.post("/product", authCheck, adminCheck, create);
