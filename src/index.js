@@ -12,7 +12,9 @@ const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
+const brandRoute = require("./routes/brandRoute");
 const subCategoryRoute = require("./routes/subCategoryRoute");
+const cloudinaryRoute = require("./routes/cloudinaryRoute");
 
 /* App config */
 const app = express();
@@ -46,7 +48,9 @@ app.use("/api", authRoute);
 app.use("/api", userRoute);
 app.use("/api", categoryRoute);
 app.use("/api", productRoute);
+app.use("/api", brandRoute);
 app.use("/api", subCategoryRoute);
+app.use("/api", cloudinaryRoute);
 
 /* App.listen */
 app.listen(port, () =>

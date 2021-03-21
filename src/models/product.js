@@ -19,7 +19,6 @@ const productSchema = new mongoose.Schema(
     description: {
       type: String,
       required: true,
-      maxlength: 2000,
       text: true,
     },
     price: {
@@ -52,18 +51,18 @@ const productSchema = new mongoose.Schema(
     },
     color: {
       type: String,
-      enum: ["Black", "Brown", "Silver", "White", "Blue"],
+      enum: ["Chocolate", "Chocolate Coconut", "Vanilla Espresso", "Mojito", "Orange mango", "Peach Tea", "Banana", "Blueberry", "Chocolate mint", "Milk Tea", "White Chocolate", "Chocolate Mint", "Chocolate Smooth"],
     },
     brand: {
       type: ObjectId,
       ref: "Brand",
     },
-    ratings: [
-      {
-        star: Number,
-        postedBy: { type: ObjectId, ref: "User" },
-      },
-    ],
+    // ratings: [
+    //   {
+    //     star: Number,
+    //     postedBy: { type: ObjectId, ref: "User" },
+    //   },
+    // ],
   },
   { timestamps: true }
 );

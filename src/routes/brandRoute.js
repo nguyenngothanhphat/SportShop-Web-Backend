@@ -1,17 +1,17 @@
-// const express = require('express');
-// const router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-// const userController = require("../controllers/userController");
-// const brandController = require("../controllers/brandController");
-// const {requireLogin, isAdmin, isAuth} = require('../controllers/authController');
+// middlewares
+const { authCheck, adminCheck } = require("../middlewares/auth");
 
-// router.get("/brand", requireLogin, brandController.getAllBrands);
-// router.get("/brand/:brandId", brandController.read);
-// router.post("/brand/create/:userId", requireLogin, isAuth, isAdmin, brandController.createBrand);
-// router.put("/brand/update/:brandId/:userId", requireLogin, isAuth, isAdmin, brandController.updateBrand);
-// router.delete("/brand/delete/:brandId/:userId", requireLogin, isAuth, isAdmin, brandController.deleteBrand);
+// controller
+const { create, read, update, remove, list } = require("../controllers/brandController");
 
-// router.param("brandId", brandController.getBrandById);
-// router.param("userId", userController.getUserById);
+// routes
+router.post("/brand", authCheck, adminCheck, create);
+router.get("/brands", list);
+router.get("/brand/:slug", read);
+router.put("/brand/:slug", authCheck, adminCheck, update);
+router.delete("/brand/:slug", authCheck, adminCheck, remove);
 
-// module.exports = router;
+module.exports = router;
