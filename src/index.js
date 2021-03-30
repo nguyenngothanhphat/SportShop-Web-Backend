@@ -17,6 +17,7 @@ const subCategoryRoute = require("./routes/subCategoryRoute");
 const cloudinaryRoute = require("./routes/cloudinaryRoute");
 const couponRoute = require("./routes/couponRoute");
 const stripeRoute = require("./routes/stripeRoute");
+const adminRoute = require("./routes/adminRoute");
 
 /* App config */
 const app = express();
@@ -53,8 +54,9 @@ app.use("/api", productRoute);
 app.use("/api", brandRoute);
 app.use("/api", subCategoryRoute);
 app.use("/api", cloudinaryRoute);
-app.use("/api", couponRoute)
-app.use("/api", stripeRoute)
+app.use("/api", couponRoute);
+app.use("/api", stripeRoute);
+app.use("/api", adminRoute);
 
 /* App.listen */
 app.listen(port, () =>
