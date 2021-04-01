@@ -6,7 +6,7 @@ const router = express.Router();
 // middlewares
 const { authCheck, adminCheck } = require("../middlewares/auth");
 
-const { orders, orderStatus } = require("../controllers/admin");
+const { orders, orderStatus } = require("../controllers/adminController");
 
 // routes
 router.get("/admin/orders", authCheck, adminCheck, orders);
