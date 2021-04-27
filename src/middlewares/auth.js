@@ -31,3 +31,16 @@ exports.adminCheck = async (req, res, next) => {
     next();
   }
 };
+
+exports.sellerCheck = async (req, res, next) => {
+  const { email } = req.user;
+  const sellerUser = await User.findOne({ email }).exec();
+
+  if (sellerUser.role !== "seller") {
+    res.status(403).json({
+      err: "Admin resource. Access denied.",
+    });
+  } else {
+    next();
+  }
+};
