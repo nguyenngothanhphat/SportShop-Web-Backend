@@ -23,7 +23,7 @@ exports.adminCheck = async (req, res, next) => {
 
   const adminUser = await User.findOne({ email }).exec();
 
-  if (adminUser.role !== "admin") {
+  if (adminUser.role === 'subcriber') {
     res.status(403).json({
       err: "Admin resource. Access denied.",
     });
