@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 // middlewares
-const { authCheck } = require("../middlewares/auth");
+const { authCheck, adminCheck } = require("../middlewares/auth");
 // controllers
 const {
     userCart,
@@ -17,6 +17,9 @@ const {
     wishlist,
     removeFromWishlist,
     createCashOrder,
+    list,
+    update,
+    getUser,
 } = require("../controllers/userController");
 
 router.post("/user/cart", authCheck, userCart); // save cart
@@ -36,6 +39,9 @@ router.post("/user/wishlist", authCheck, addToWishlist);
 router.get("/user/wishlist", authCheck, wishlist);
 router.put("/user/wishlist/:productId", authCheck, removeFromWishlist);
 
+router.get("/user/:_id", getUser)
+router.get("/users", list);
+router.put("/user/:userId", authCheck, adminCheck, update);
 // router.get("/user", (req, res) => {
 //   res.json({
 //     data: "hey you hit user API endpoint",

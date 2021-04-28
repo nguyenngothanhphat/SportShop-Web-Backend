@@ -241,3 +241,33 @@ exports.createCashOrder = async (req, res) => {
   console.log("NEW ORDER SAVED", newOrder);
   res.json({ ok: true });
 };
+
+exports.list = async (req, res) => {
+  res.json(await User.find({}).sort({createdAt: -1}).exec());
+}
+
+exports.getUser = (req, res) => {
+  console.log(req.params._id);
+  User.findOne({_id: req.params._id}).exec((err, user) => {
+    if(err) console.log(err);
+    res.json(user);
+  })
+}
+
+exports.update = async (req, res) => {
+  const {role} = req.body;
+  console.log(req.body);
+  console.log(req.params);
+  try {
+    const updated = await User.updateOne(
+      {_id: req.params.userId},
+      {$set: {
+        role: role 
+      }},
+      {new: true}
+    ).exec();
+    res.json(updated)
+  } catch(err) {
+    res.status(400).send("User update failed");
+  }
+}
